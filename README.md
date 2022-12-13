@@ -46,6 +46,7 @@ make space
 ```
 You can then see the result in your activity monitor (macOS).
 <img width="928" alt="Screen Shot 2022-12-13 at 18 31 54" src="https://user-images.githubusercontent.com/114371692/207307066-e8de819e-aeb7-423b-8097-d5c246b9d36e.png">
+
 The picture above displays the memory it takes for N = 1000
 
 The graph below illustrates as the size of matrix increases the bigger memory it requires.
