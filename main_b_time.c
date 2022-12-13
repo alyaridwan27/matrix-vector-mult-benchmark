@@ -1,48 +1,49 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "mylib/mylib.h"
 #include <time.h>
 
-clock_t start, end;
-double cpu_time_used;
-double total_time_used;
-int res;
+#include "mylib/mylib.h"
 
-FILE *fp, *fp2;
+#define LOWER 1
+#define UPPER 9
 
+int generateRandomInt(int lower, int upper){
+    return (rand() % (upper-lower+1)) + lower;
+}
 
-int main(){
-
-    int N = 5000;
-
-    int *matrix = (int *) malloc(N*N*sizeof(int));
-    int *vector = (int *) malloc(N*sizeof(int));
-    int *result = (int *) malloc(N*sizeof(int));
-    
-    fp = fopen("dataRuntime.dat", "w");
-    fp2 = fopen("dataRuntimeMagnified.dat", "w");
-
-    for(N = 100; N <= 5000; N += 100){
-
-        initMat(matrix, N); 
-        initVec(vector, N);
-
-        start = clock();
-        matVecMult(matrix, vector, result, N);
-        end = clock();
-
-        cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-
-        fprintf(fp, "(%d,%lf),", N, cpu_time_used);
-        fprintf(fp2, "(%d,%lf),", N/100, cpu_time_used*100);
-
-        printf("runtime of current step: %lfs   N: %d\n", cpu_time_used, N);
+void initMat(int* mat, int N){
+    for(int i=0; i<N; i++){
+        for(int j=0; j<N; j++){
+            mat[N*i+j] = generateRandomInt(LOWER,UPPER);
+        }
     }
+}
 
-    fclose(fp);
+void initVec(int* vec, int N){
+    for(int i=0; i<N; i++){
+        vec[i] = generateRandomInt(LOWER,UPPER);
+    }
+}
 
+int main(void) {
+    srand(time(0));
 
+    int N = 2500;
 
+    int* mat = (int *) malloc(N*N*sizeof(int));
+    int* vec = (int *) malloc(N*sizeof(int));
+    int* vecResult = (int *) malloc(N*sizeof(int));
+
+    initMat(mat, N);
+    initVec(vec, N);
+
+    float startTime = (float)clock()/CLOCKS_PER_SEC;
+    matVecMult(mat, vec, vecResult, N);
+    float endTime  = (float)clock()/CLOCKS_PER_SEC;
+
+    double timeTaken = endTime - startTime;
+
+    printf("Time elapsed with N = %d : %f s\n", N, timeTaken);
 
     return 0;
 }
